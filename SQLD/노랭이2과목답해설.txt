@@ -1,0 +1,801 @@
+1.
+4
+DCL(Data Control Language)은 데이터 제어어로
+데이터베이스에 접근하고 객체들을 사용하도록 권한을 주고 회수하는 명령어
+ex) GRANT(권한 부여), REVOKE(권한 회수), COMMIT(작업 완료), ROLLBACK(원상복구)
+-> COMMIT와 ROLLBACK은 TCL(Transaction Control Language)라고 표현하기도 한다
+DML(Data Manipulation Language)는 데이터 조작어로
+정의된 데이터베이스에 입력된 레코드를 수정하거나 삭제하는 역할을 하는 명령어
+ex) SELECT(선택), INSERT(삽입), UPDATE(수정), DELETE(삭제)
+DDL(Data Definition Language)은 데이터 정의어로
+데이터베이스를 정의하는 언어를 말하며, 데이터(테이블)를 생성하거나 수정 삭제 등 데이터의 전체 골격을 결정하는 명령어
+ex) CREATE(생성), ALTER(수정), DROP(삭제), TRUNCATE(초기화)
+
+2.
+2
+테이블의 구조를 생성 변경 삭제하는 데이터구조를 정의하는데 사용되는 명령어는 DDL이다.
+CREATE, ALTER, DROP, TRUNCATE가 있으며, GRANT는 권한을 부여하는 DCL이다.
+
+3.
+TCL(Transaction Control Language)
+DCL 중에서도 논리적인 작업의 단위를 묶어 작업단위(Transaction)별로 제어하는 COMMIT, ROLLBACK을
+TCL이라고 부른다.
+
+4.
+1
+DML은 비절차적 데이터조작어이고, 사용자가 무슨 데이터를 원하는지를 명세한다.
+절차적 데이터 조작어는 어떻게 데이터를 접근해야 하는지 명세한다.
+절차적 데이터 조작어로는 PL/SQL(오라클), T-SQL(SQL Server) 등이 있다.
+Data sub language는 응용프로그램과 DBMS를 연결하는 도구로 호스트언어로 작성된 응용프로그램 속에서
+사용되는 명령어의 집합이다.
+
+5.
+1,2
+DML - SELECT(* FROM) UPDATE(* SET) DELETE(FROM) INSERT(INTO)
+TCL - COMMIT, ROLLBACK
+DCL - GRANK, REVOKE
+DDL - CREATE, ALTER, DROP, TRUNCATE
+
+6.
+4
+CREATE TABLE PRODUCT ( PROD_ID VARCHAR2(10) NOT NULL, PROD_NM VARCHAR2(100) NOT NULL,
+REG_DT DATE NOT NULL, REGR_NO NUMBER(10) NULL );
+ALTER TABLE PRODUCT ADD CONSTRAINT PRODUCT_PK PRIMARY KEY (PROD_ID)
+아니면
+CREATE TABLE PRODUCT (PROD_ID VARCHAR2(10) NOT NULL, PROD_NM VARCHAR2(100) NOT NULL,
+REG_DT DATE NOT NULL, REGR_NO NUMBER(10), CONSTRAINT PRODUCT_PK PRIMARY KEY (PROD_ID) );
+이런식으로 만들어야한다!
+
+7.
+4
+ALTER TABLE 기관분류 ALTER COLUMN 분류명 VARCHAR(30) NOT NULL;
+ALTER TABLE 기관분류 ALTER COLUMN 등록일자 DATE NOT NULL;
+SQL Server에서는 괄호를 사용하지 ㅇ낳고, 여러 컬럼을 동시에 수정하는 구문은 지원하지 않는다.
+
+8.
+3
+NULL은 공백(ASCII 코드 32번), 0(ASCII 코드 48번)과 다른 값이며, 조건에 맞는 데이터가 없을때의 공집합과도 다르다!
+아직 정의되지 않은 미지의 값이거나 현재 데이터를 입력하지 못하는 경우를 나타낸다.
+또한 비교하면 모두 Unknown을 반환하게 된다.
+
+9.
+2
+T 모두삭제 S 모두 삭제(Cascade) R (B칼럼값이 0으로 바뀜)
+
+10.
+1
+PK는 UNIQUE & NOT NULL 속성을 동시에 가진다
+UNIQUE는 테이블 내에서 중복되는 값이 없지만, NULL 입력이 가능하다. (열당 하나만 NULL 허용)
+제약조건은 PRIMARY KEY, UNIQUE KEY, NOT NULL, CHECK(제약조건 추가), FOREIGN KEY가 있다.
+
+11.
+1
+테이블 명은 문자로 시작해야하고, 대문자, 소문자, 숫자, _ , $, # 만 사용할 수 있다.
+
+12.
+1,3
+CREATE TABLE EMP
+(EMP_NO VARCHAR2(1) NOT NULL PRIMARY KEY, EMP_NM VARCHAR2(30) NOT NULL,
+DEPT_CODE VARCHAR2(4) DEFAULT '0000' NOT NULL, JOIN_DATE DATE NOT NULL,
+REGIST_DATE DATE);
+CREATE INDEX IDX_EMP_01 ON EMP (JOIN_DATE)
+아님
+CREATE TABLE EMP
+(EMP_NO VARCHAR2(1) NOT NULL, EMP_NM VARCHAR2(30) NOT NULL,
+DEPT_CODE VARCHAR2(4) DEFAULT '0000' NOT NULL, JOIN_DATE DATE NOT NULL,
+REGIST_DATE DATE);
+CREATE INDEX IDX_EMP_01 ON EMP (JOIN_DATE)
+ALTER TABLE EMP ADD CONSTRAINT EMP_PK PRIMARY KEY (EMP_NO);
+여기서 PRIMARY KEY는 UNIQUE+NOT NULL 조건이기 떄문에 NOT NULL을 생략해도 상관이 없다.
+
+13.
+3
+학번 칼럼은 PRIMARY KEY이므로 NOT NULL이다. 그러므로 SQL1과 SQL2는 항상 같은 값을 출력한다.
+
+14. 
+2,3
+외래키는 테이블 생성시 설정 가능하고, NULL값을 가질 수 있으며 한 테이블에 여러개 존재할 수도 있고
+참조 무결성 제약을 받을 수 있다.
+참조 무결성 제약 : 외래키는 참조할 수 없는 값을 가질 수 없다. (참조하려고 만든건데 참조못하면... 안되잖아!)
+
+15.
+3
+UNIQUE여도 NOT NULL이 아니라면 NULL값을 한 개는 가질 수 있다.
+
+16.
+ALTER / DROP COLUMN
+칼럼을 삭제 - DDL(Data Definition Language)의 DROP
+DROP TABLE EMP COLUMN COMM
+
+17.
+2
+기존 직원 테이블에는 요소가 3개 있었지만 부서에서 부서번호 20인 요소가 삭제되면 직원에서도
+ON DELETE CASCADE명령때문에 부서의 부서번호를 REFERENCE해온 소속부서가 20인 요소가 같이 삭제되어
+남은 직원테이블의 요소는 1개뿐이다. 그래서 3과 1이 결과로 도출된다.
+ON DELETE CASCADE : Master 삭제시 Child 같이 삭제
+ON DELETE SET NULL :  Master 삭제시 Child 해당 필드 NULL
+ON DELETE SET DEFAULY : Master 삭제시 Child 해당 필드 DEFAULT값
+ON DELETE RESTRICT : Child 테이블에 PK값이 없는 경우만 Master 삭제 허용
+ON DELETE NO ACTION : 참조무결성을 위반하는 삭제/수정 액션을 취하지 않는다.
+-> 참조 무결성은 외래키 값은 NULL이거나 참조 릴레이션의 기본키 값과 동일해야 한다는 것 (이상한게 못들어감!)
+-> 도메인 무결성은 특정 속성 값이 그 속성에 정의된 도메인에 속한 값이어야 함 (성별에서 남, 여 이외의 값 불가)
+
+18.
+RENAME STADIUM TO STADIUM_JSC;
+RENAME OLD_OBJECT_NAME TO NEW_OBJECT_NAME (Oracle)
+아니면 ALTER TABLE old_table RENAME new_table 이런식으로도 가능하다
+
+19.
+2
+ON DELETE RESTRICT 명령어는 Child 테이블에 PK값이 없는 경우에만 Master 삭제를 허용한다.
+
+20.
+4
+1: 삽입 컬럼을 명시하지 않은 경우 모든 컬럼을 삽입해야 한다
+2: DEGREE에 2글자는 들어갈 수 없다
+3: AMT는 NOT NULL상태가 될 수 없다
+
+21.
+2
+전부 NOT NULL조건이 걸려있기 때문에 INSERT를 할 때 모든 값을 넣어야 한다.
+
+22.
+1,3
+2: 주문탭에서 C003을 넣으려 하면 ADD CONSTRAINT 조건때문에 들어가지 않는다 (무결성제약오류)
+4: 고객테이블의 고객아이디 C002를 지우려고 할 때 ON DELETE SET NULL조건때문에 NULL로 바뀌어야 하지만
+주문테이블의 주문번호, 고객ID, 주문일시 칼럼의 NOT NULL 제약조건에 의해 실패한다.
+
+23.
+1
+DROP과 TRUNCATE는 완전삭제로 로그를 남기지 않기 때문에 DML을 사용해야 하는데
+DELETE의 사용법은 DELETE FROM 테이블명 WHERE = ' ' 이기 때문에 1번만 가능하다.
+DROP는 테이블 전체를 삭제하고, 공간과 객체를 모두 삭제한다. 삭제 후 되돌릴 수 없다.
+TRUNCATE는 테이블은 남겨놓고 데이터만 삭제한다.(용량이 줄어든다) 삭제후 되돌릴 수 없다.
+DELETE는 데이터는 지울 수 있지만 테이블 용량은 줄어들지 않는다. 원하는 데이터만 지울 수 있고 삭제를 되돌릴 수 있다.
+
+24.
+DISTINCT
+중복을 제거하기 위해서는 DISTINCT 명령어를 SELECT () Column명 FROM Table명
+여기서 () 위치에 넣어준다.
+SELECT 칼럼명 FROM 테이블명 GROUP BY ~
+INSERT INTO 테이블명(칼럼명) VALUES (~,~,~)
+UPDATE 테이블명 SET 컬럼명 = 값 WHERE 컬럼명 = 값
+DELETE FROM 테이블명 WHERE 컬럼명 = 값
+
+25.
+1
+매출 테이블의 스키마정의를 유지하기 위해서 TRUNCATE 명령어를 사용한다.
+DROP 명령어를 사용하면 ㄹㅇ로 모든게 날아간다.
+
+26.
+1,4
+1: DROP는 싸그리 날리고, DELETE는 데이터만 지우고 용량은 그대로 남아있다. 복구도 가능하다
+4: DML을 사용할 때는 사용자가 commit 작업을 해야 저장되지만, DDL을 사용할 때는 알아서 commit이 된다.
+(auto commit)
+
+27.
+2,4
+지속성: 트랜잭션이 성공적으로 수행시 갱신한 내용은 영구적으로 저장된다
+일관성: 트랜잭션 이전에 데이터베이스 내용이 올바르면 트랜잭션 이후에도 데이터베이스 내용이 올바르게 되어있어야 한다.
++ 원자성 : 트랜잭션에서 정의된 연산들은 모두 성공적으로 실행되거나 전혀 실행되지 않아야 한다.
++ 고립성 : 트랜잭션 실행 도중 다른 트랜잭션의 영향을 받아 잘못된 결과를 만들어서는 안된다.
+
+28. ★
+1,4
+Dirty Read: 다른 트랜잭션에 의해 수정되었지만 아직 커밋되지 않은 데이터를 읽는 것
+Non-repeatable Read: 한 트랜잭션 내에서 같은 쿼리를 2번 수행했는데 그 사이에 다른 트랜잭션이
+값을 수정 또는 삭제하는 바람에 두 쿼리 결과가 다르게 나타나는 현상
+Phantom Read: 한 트랜잭션 내에서 같은 쿼리를 2번 수행했는데 첫 쿼리에서 없던 유령 레코드가 두번째 쿼리에서
+나타나는 현상
+isolation(고립성): 트랜잭션 실행 중 다른 트랜잭션의 영향을 받아 잘못된 결과를 만들어서는 안된다
+고립성은 격리성이 낮은 경우 발생하는 문제점이 아니라 트랜잭션의 특성 중 하나이다.
+
+29.
+3
+Oracle에서 ROLLBACK 실행으로 인해서 발생하는 현상은 없다.
+CREATE가 동작할 때 Auto commit 되기 때문이다.
+SQL Server에서는 DDL 문장 수행 후 자동으로 Commit를 수행하지 않는다.
+
+30.
+트랜잭션, COMMIT, ROLLBACK
+설명 필요 X / 트랜잭션은 데이터베이스의 논리적 연산단위! 밀접히 관련되어 분리될 수 없는 한개 이상의
+데이터베이스 조작을 가리킨다!
+
+31.
+3
+ROLLBACK은 COMMIT이 안되어있다면 모두 원상복귀시켜버린다.
+ROLLBACK 구문을 만나면 최초의 BEGIN TRANSACTION 시점까지 모두 ROLLBACK이 진행된다.
+
+32.
+LCD-TV
+ROLLBACK TRANSACTION SP2를 통해 SP2로 다시 ROLLBACK되어서
+UPDATE문은 맨 앞의 1개만 적용된 채로 COMMIT된다.
+ROLLBACK TRANSACTION [SavePoint]를 실행하면 부분적인 트랜잭션 취소가 가능하다.
+세이브포인트는 SAVE TRANSACTION [SavePoint]로 설정할 수 있다.
+
+33.
+WHERE
+WHERE절은 SELECT, FROM절과 함께 조건을 설정하여 데이터를 뽑아올 수 있게 도와준다.
+
+34.
+2
+논리 연산자의 우선순위는 괄호 > NOT > 비교연산자 > AND > OR 순이다.
+그렇기에 AND쪽이 먼저 계산되고, 그 후에 OR이 계산된다.
+
+35.
+4
+NULL이 포함된 사칙연산의 결과는 NULL이다.
+NULL값을 비교하면 FALSE를 리턴
+특정값보다 크다 적다라고 표현할 수 없다
+
+36. ★
+1
+NULL값을 조건절에서 사용하는 경우 IS NULL, IS NOT NULL이란 키워드를 사용해야 한다.
+
+37.
+3
+1: VARCHAR인데 WHERE문에서 우변에 '' 없이 숫자를 넣으려 했기 때문에 오류가 발생한다
+2: 공백이 들어가진 않고 NULL로 입력된다.
+3: 서비스명 IS NULL 조건으로 조회하여야 한다.
+4: SQL Server에서는 ''는 NULL이 아닌 입력값 그 자체로 들어가기 떄문에 조회할 때 ''으로 조회할 수 있다.
+
+38.
+4
+정확하게 연과 월이 검색되도록 조건절을 설정해야한다.
+
+39.
+4
+||는 문자열이나 컬럼을 합쳐주는 역할을 한다.
+TO_DATE('201501', 'YYYYMM')을 하면 2015년 01월 01일 00:00:00 이라는 Date값이 만들어진다.
+이것과 같은 값이 SVC_END_DATE에 들어가있어야 가져온다는 소리이고,
+1,2,3은 2015년 1월이기만 하면 값을 가져오게 되므로 4번만 다르게 동작한다.
+
+40. ★
+2
+함수의 입력 행수에 따라 단일행 함수와 다중행 함수로 나눠진다.
+단일행 함수는 SELECT, WHERE, ORDER BY, UPDATE의 SET절에 사용이 가능하다.
+1:M관계의 두 테이블을 조인할 때 M쪽에서 출력된 행이 하나씩 단일행 함수의 입력값으로 사용되므로
+단일행 함수를 사용할 수 있다.
+다중행 함수도 단일행 함수와 동일하게 단일 값만을 반환한다.
+
+41. ★
+3
+REPLACE(컬럼명,바꿀거찾기,바꿀내용) 형태로 REPLACE함수를 사용한다.
+SELECT문에서 AS는 생략이 가능하다(SELECT 컬럼명 컬럼별칭 FROM 테이블명 WHERE 조건절 형태로 사용가능)
+
+42. ★
+3
+오라클 날짜연산은 숫자연산과 같다. 특정 날짜에 1을 더하면 하루를 더한 결과와 같다
+하루를 24시간으로 나누면 1시간이고, 이걸 또 6분으로 나누면 10분이 된다.
+날짜/시간/분/초 순서대로 내려간다
+
+43.
+LOC WHEN 'NEW YORK' THEN 'EAST'
+WHEN LOC = 'NEW YORK' THEN 'EAST'와 같다.
+CASE문은
+WHEN 조건1 THEN 값1
+WHEN 조건2 THEN 값2
+ELSE 값2
+END
+형식으로 사용한다
+
+44. ★★
+4
+TEAM_ID 열을 가져오고, ISNULL을 통해 FW 열을 만든다
+ISNULL(컬럼,넣을값) 인데, 컬럼자리에 SUM함수가 들어가있고, SUM 안에는 CASE문이 들어있다.
+CASE문을 돌려서 POSITION이 'FW'일때만 1이고 아니면 NULL이 된다. (CASE라는 임의의 열이 만들어진다고 생각)
+그리고 그 열의 값들을 모두 더한다. 
+GROUP BY가 TEAM_ID로 걸려있으므로 SUM을 할 때 TEAM_ID별로 구분된다.
+SUM을 통해 CASE열의 모든 값을 더하고
+NVL(SUM(),0)이 들어가면, 만약 SUM값이 NULL이면 0이 들어가고 NULL이 아니면 SUM()값이 들어가게 된다.
+그래서 결과적으로 TEAM_ID별로 그룹핑되고, TEAM_ID FW MF DF GK SUM 순서대로 값이 출력된다.
+
+이걸 전부 돌려서 SUM을 통해 다 더해준 값을 
+CASE문장에서 데이터가 없는 경우를 0으로 표시해야한다
+SQL Server -> ISNULL(컬럼, NULL인경우 대체값) - 컬럼이 NULL인경우 대체값 넣음
+Oracle -> NVL(컬럼, NULL인 경우 대체값) - 컬럼이 NULL인경우 대체값 넣음
+NVL2(컬럼, "지정값1", "지정값2") - 컬럼이 NULL이 아니면 지정값1, NULL이면 지정값2
+UNION은 결과를 합칠 때 중복되는 행은 하나만 표시
+UNION ALL은 중복제거를 하지 않고 모두 합쳐서 표시
+
+45.
+2
+1: 없진 않다 '' 추력
+2: 맞음 - NULL이면 X로 변경
+3: NULL은 비교불가로 col2 = NULL을 비교하면 무조건 false만 나온다. 그래서 실행 결과는 0이다. (IS NULL로 체크) 
+4: 실행 결과는 2
+
+46.
+NULLIF
+NULLIF(표현식1, 표현식2) 는 표현식1이 표현식2와 같으면 NULL, 다르면 표현식1을 출력한다.
+COALESCE(표현식1, 표현식2, ...)는 임의의 개수 표현식에서 NULL이 아닌 최초의 표현식을 나타낸다.
+만약 모든 표현식이 NULL이면 NULL을 리턴한다.
+
+47.
+4
+NULL이 들어간 연산은 무조건 NULL이고, 0으로 나누면 오류가 발생한다.
+
+48.
+3
+1+2+3 해서 6이 나온다.
+COALESCE는 각 속성에서 첫번째로 NULL이 아닌 값을 가져오게 된다.
+
+49.
+ISNULL/NVL, NULLIF, COALESCE
+
+ISNULL(SQL Server)/NVL(Oracle)은 표현식1이 NULL이면 표현식2를 출력, 아니면 표현식1을 출력
+NULLIF는 표현식1이 NULL이면 표현식2를 출력, 표현식1이 NULL이 아니면 표현식1을 출력
+COALESCE는 표현식들을 조사해서 가장 처음으로 NULL이 아닌 친구를 출력
+
+50.
+3 
+SUM, AVG 등의 집계함수에서는 NULL값을 자동으로 빼고 집계한다.
+10, 20, 20
+
+51.
+3
+SQL1은 NULL빼고 전부 - 500+100+30+10+5 = 645
+SQL2는 차장과 부장을 더해서 10+5 = 15 (널은 한글이라 취급X)
+SQL3은 사원,대리,과장,차장,부장,NULL까지 총 6이 나온다.
+
+52.
+2
+FROM 안의 SELECT문에서는 광고매체 ID별 최초로 광고를 시작한 데이터가 들어가야한다.
+그렇기에 1,2가 적합한데, 1은 FROM으로 가져오지 않은 C의 데이터를 사용했기 때문에
+에러가 발생한다. 따라서 2번이 정답이 된다.
+
+53. ★
+4
+3: GROUP BY로 묶인 컬럼에 대해 HAVING 조건절을 사용하면 집계된 컬럼의 FILTER조건으로 사용할 수 있다.
+4: 중첩된 그룹함수의 경우 최종 결과값은 1건이 된다.
+즉 GROUP BY에 있는 메뉴ID와 사용유형코드는 SELECT절에서 AVG(COUNT(*))와 함께 나올 수 없다.
+또한 GROUP BY가 없어도 HAVING 단독으로 사용이 가능하다. (테이블 전체가 하나의 그룹이 되는 경우)
+having은 group by로 그룹화된 상태에서의 조건!!
+
+54. 
+2
+HAVING절은 SELECT보다 먼저 수행된다. 따라서 SELECT문에서 COUNT(*)를 불러오지 않아도 괜찮다.
+FROM - WHERE - GROUP BY - HAVING - SELECT - ORDER BY 순서로 수행된다.
+
+55.
+2
+999는 0으로 치환되고, 그 외에는 ID값으로 정렬되고 별도의 말이 없으므로 ASC가 적용된다.
+
+56.
+3
+오라클은 SELECT절에 기술되지 않은 칼럼으로도 정렬을 할 수 있다.
+3번에서는 GROUP BY를 사용했는데 GROUP BY 표현식이 아닌 값은 기술할 수 없다.
+
+57.★
+3
+ORDER BY 절에 컬럼명 대신 Alias명이나 컬럼 순서를 나타내는 정수를 혼용하여 사용할 수 있다.
+
+58.
+2
+ID에 따라 A면 1, 나머지는 2로 해서 오름차순으로 정렬하고, 만약 ID가 같으면 AMT를 내림차순으로 정렬한다.
+
+59.
+4
+SELECT 문장 순서는 FROM - WHERE - GROUP BY - HAVING - SELECT - ORDER BY
+
+60.
+4
+TOP()을 통해 () 안에 들어가는 요소만큼을 출력하고, 같을 경우 WITH TIES 명령어와, ORDER BY로 정렬한다.
+
+61.
+3
+여러 테이블로부터 원하는 데이터를 조회하기 위해서는 전체 테이블 개수에서 최소 N-1개만큼 JOIN조건이 필요하다
+
+62.
+4
+영화명과 배우명을 요소가 들어있는 테이블에서 가져와야함
+WHERE조건이 이상이므로 >=이 들어가야함
+AND조건은 중복을 거르기 위해 요소가 있는 테이블명을 명시해야함
+
+63.
+4
+DBMS 옵티마이저는 FROM절에 나열된 테이블이 많아도 항상 2개의 테이블씩 짝을 지어서 JOIN을 수행한다.
+일반적으로 JOIN은 PK와 FK값의 연관성에 의해 성립된다
+EQUI JOIN은 테이블간의 컬럼값이 정확하게 일치하는 경우 사용된다
+특히 이 EQUI JOIN은 = 연산자에 의해서만 수행되고, 이게 아니면 모두 NON EQUI JOIN이다
+대부분 NON EQUI JOIN을 수행할 수 있지만 때로는 설계상의 이유로 수행이 불가능할 수도 있다.
+
+64.
+3
+FROM에서 테이블 2개를 가져와서, WHERE A.ENAME LIKE B.RULE으로 조인했다.
+여기서 S%에 속하는 EMP_TBL 요소 2개, %T%에 속하는 EMP_TBL 요소 2개로 총 4개가 정답이다.
+
+65.
+2
+UPDATE는 순수 관계연산자가 아니다.
+순수 관계 연산자는 SELECT, PROJECT, JOIN, DIVIDE가 있다. (여기서 DIVIDE는 현재 사용되지 않는다)
+
+66. ★★
+3,4
+EXIST(서브쿼리)는 서브쿼리의 결과가 한 건이라도 존재하면 TRUE, 없으면 FALSE
+NOT EXISTS는 반대!
+LEFT OUTER JOIN 사용 -> 고객ID가 같고, 컨텐츠ID가 같은 값을 뽑아서 모두 출력한 후에
+특정 고객의 고객ID와 비선호컨텐츠ID가 같은 부분만 뽑아서 D.컨텐츠ID에 출력한다
+그 후 특정 고객(custID)의 D.컨텐츠ID에서 IS NULL인 경우만 추출하면 추천할 컨텐츠 ID와 컨텐츠명만 SELECT된다
+NOT EXISTS 사용 -> 비선호 컨텐츠에서 고객ID와 비선호컨텐츠ID를 가져와서 추천컨텐츠와 비교
+추천컨텐츠와 비선호컨텐츠가 같으면 값이 있을텐데, NOT EXISTS이므로 같지 않은 경우의 컨텐츠ID와
+컨텐츠명만 출력하면 된다.
+1: 비선호컨텐츠의 컨텐츠ID와 추천 컨텐츠의 컨텐츠ID를 비교해야하는데 이게 빠져있다.
+2: RIGHT OUTER JOIN이 아닌 LEFT OUTER JOIN이다
+
+67.
+1,2
+3: 제품과 생산랑니 엔터티에는 생산제품과 대응되지 않는 레코드가 있을 수 있다.
+4: 특정 생산라인에서 생산되는 제품의 제품명을 알기 위해서는 생산제품과 제품만 inner join하면 알 수 있다.
+
+68.
+2
+INNER JOIN을 통해 A.고객번호=B. 고객번호를 만족하는 값을 모두 불러온 뒤에
+GROUP BY A.이름, A.등급을 통해 그룹핑해주고 거기서 구매번호가 3보다 큰 경우 출력한다.
+
+69.
+2
+1: 부등호의 방향이 반대
+3: INNER JOIN에서 조인조건에는 AND를 통해 여러개를 동시에 조인하는 것을 할 수 없다.
+4:  시간대구간에서 사용시간대와 시간시간대 종료시간대가 연결되어있지 않아서 정상적으로 나오지 않는다
+
+70.
+1
+USING 조건절을 이용한 EQUI JOIN에서도 JOIN 칼럼에 대해서는 ALIAS나 테이블 이름같은 접두사를 붙일 수 없다
+USING을 쓰면 괄호 안에 JOIN할 칼럼명을 적으면 된다.
+
+71.
+CROSS JOIN
+FROM 안에 들어간 두 테이블에서 공통적인 컬럼이 없다면 Cartesian Product가 생성된다.
+만약 임의로 이런 Cartesian Product를 만들고 싶다면 CROSS JOIN을 넣으면 된다.
+
+72.
+1
+단말기 ID는 B에서 가져온다는 것을 주의하자!
+WHERE이 아닌 LEFT OUTER JOIN의 IN조건절에서 나왔기 때문에 다 가져오되 조건에 맞는 부분만 JOIN한다.
+
+73.
+4
+1,2는 FULL OUTER JOIN이 LEFT OUTER JOIN과 RIGHT OUTER JOIN의 합집합(UNION)이라는 것을 알면 같은 것을 알 수 있다
+3은 INNER JOIN으로 교집합을 구하고, A에서 A.ID와 B.ID가 같지 않은 부분, B에서 B.ID와 A.ID가 같지 않은 부분을
+UNION ALL 한 것이다. 어짜피 각 부분에서 중복이 없으므로 (순수A, 교집합, 순수B 니까)
+UNION ALL, UNION 중 뭘 써도 상관이 없다.
+NULL이 들어간 이유는, 컬럼의 수가 같아야 UNION을 할 수 있기 때문이다
++ FULL OUTER JOIN은 중간 교집합부분에서 중복된 것을 없애준다.
+
+74. 
+1
+주키와 외래키는 영향을 끼치지 않는다.
+
+75.
+LEFT OUTER JOIN
+좌측 테이블이 기준이 된다.
+
+76.
+2
+LEFT OUTER JOIN이기 떄문에 TAB1의 모든 요소는 출력된다.
+그리고 TAB2는 조건에서 A.C1=B.C1이면서 B.C2가 1부터 3 사이인 값만 출력하고 나머지는 NULL이 된다.
+
+77.
+1
+SQL Server에서 사용하는 ANSI 표준 구문으로 OUTER JOIN구문을 사용할 때는 (+)를 사용하여 처리할 수 있다.
+이때 INNER쪽 테이블(게시글)에 있는 조건절을 ON절에 위치시켜야 정상적으로 OUTER JOIN이 수행된다.
+OUTER의 대상이 되는 LEFT쪽의 조건인 A.사용여부는 WHERE에 위치하여야 한다.
+
+78.
+5
+dept_num이 30이고, 전자계산학과가 아닌 st.name의 수를 세는 것이므로 5명이다.
+
+79.
+4
+TAB1 - TAB2이므로, 4번이 가장 적절하다.
+NOT IN을 사용한 2번은 A와  B에 대하여 각각 연산을 수행하였으므로 다른 결과가 나온다
+집합연산자는 UNION(합집합, 중복제거), UNION ALL(합집합, 중복포함), INTERSECT(교집합), EXCEPT(차집합)
+으로 구성되어있다.
+(SQL Server의 EXCEPT는 Oracle에서의 MINUS와 비슷하게 쓰인다)
+
+80. ★
+2
+수행SQL은 이용된 적이 있는 서비스아이디, 서비스명, 서비스URL을 도출한다. 
+1. 이용한 적 있는 서비스를 모두 출력한다. 다만 이것은 서비스 이용건수만큼 출력된다.
+2: 서비스를 이용하지 않은 서비스ID만 골라서 뽑아냈는데 그것을 NOT EXISTS했으므로 이용한 서비스만 남는다
+3: 이용한 적 없는 서비스만 출력된다.
+4: 서비스와 서비스이용의 위치가 바뀌어야하고 (서비스만 출력하면 되므로) IN이 NOT IN이 되어야 한다.
+(서비스 하지 않은 것만 뽑아낸 다음 그것들을 NOT IN으로 반전시켜서 출력한다)
+
+81.
+INTERSECT
+집합연산자는 UNION(합집합, 중복제거), UNION ALL(합집합, 중복포함), INTERSECT(교집합), MINUS/EXCEPT(차집합)
+으로 구성되어있다.
+
+82.
+2
+UNION ALL을 사용하면 칼럼 ALIAS는 첫 번째 SQL 모듈 기준으로 표시, 정렬 기준은 ORDER BY로 표시!
+
+83.
+1
+마지막에 UNION이 왔으므로 중복이 제거된 상태로 SELECT가 실행된다.
+
+84.
+1
+UNION은 중복X, UNION ALL은 중복O
+
+85.
+3
+교집합은 INTERSECT이다.(intersection)
+추가로 PRODUCT(곱연산)은 CROSS JOIN 으로 가능하다.
+
+86. ★
+3
+1: 양쪽 컬럼은 필수관계이므로 공집합이 추출된다.
+2: UNION ALL을 하면 2배가 된다. (UNION하면 그대로)
+4: 둘은 1:1 필수관계이므로 연산을 수행하면 같은 값이 그대로 나오게된다.
+
+87. ★★
+C
+START WITH C2 IS NULL을 통해 부모가 C2가 된다.
+CONNECT BY PRIOR 자식 = 부모 이므로 순방향이다.
+자식은 부모를 찾아가고, 0층에는 A, 1층에는 BC, 2층에는 D가 위치하게 된다.
+그리고 같은 층의 경우 C3의 내림차순으로 정렬하므로
+A C B D순으로 정렬된다.
+
+88.
+4
+Oracle 계층형 질의에서 루트 노드의 LEVEL값은 1이다
+
+89.
+1
+START WITH절에서 필터링된 시작데이터는 결과목록에 포함되고, 그 이후가 CONNECT BY절에 의해 결정된다.
+AND 입사일자 BETWEEN ~ 의 조건에 맞는 친구들이 뒤로 따라오게 된다.(PRIOR 자식 = 부모에 의해서 순방향!)
+
+90. ★
+4
+PRIOR 키워드는 CONNECT BY에서 뿐만 아니라 SELECT, WHERE절에서 사용할 수 있다.
+SQL Server에서의 계층형 질의문은 CTE(Common Table Expression)를 재귀호출함으로 계층구조를 전개한다.
+또한 앵커멤버를 실행하여 기본 결과 집합을 만들고 이후 재귀 멤버를 지속적으로 실행한다.
+
+91. ★★
+1
+PRIOR이 부모쪽에 붙으면 역방향, 자식쪽에 붙으면 순방향
+1번만 120을 기준으로 순방향과 역방향을 모두 SELECT하고 있다.
+결과표를 참고하자.
+PRIOR이 붙지 않은 쪽에서 PRIOR쪽으로 이동한다고 생각하자
+4번은 120에서 출발하여 100까지 간다음 (상위부서코드가 NULL인 곳까지 간다음) 다시 순방향으로 끝까지 가져온다.
+
+92.
+1
+셀프조인은 동일 테이블 내 두 칼럼이 연관이 되어있을 때 사용한다.
+반드시 식별을 위해 Alias를 사용해야한다.
+
+93.
+3
+A일자, B매출액의 합을 가져와야 하므로 3이 답이 된다.
+WINDOW함수는 행과 행간의 관계를 정의하기 위해 만든 함수로 순위, 집계, 순서 관련 함수등을 말한다.
+
+94.
+3
+||는 연결연산자로, 리터럴이나 컬럼을 하나의 문자열로 검색한다.
+A와 B를 연결했을 때 모두 다른 값이기에 DISTINCT는 영향을 끼치지 못한다.
+
+95.
+2
+서브쿼리는 단일 행 또는 복수행 비교연산자와 함께 사용할 수 있다.
+서브쿼리는 SELECT절, FROM절, HAVING절, ORDER BY절 등에서 사용이 가능하다.
+서브쿼리의 결과가 단일 행 결과를 반환하는 경우 = <=  >=등이 연산자와 함께 사용이 가능하다.
+복수행 결과를 반환하는 경우 IN, ALL, ANY 등 복수행 비교연산자와 사용해야한다.
+연관 서브쿼리는 서브쿼리가 메인쿼리 컬럼을 포함하고 있는 형태의 서브쿼리이다.
+다중컬럼서브쿼리는 여러 개의 칼럼이 반환되어 메인 쿼리 조건과 비교되는데, SQL Server에서는 지원하지 않는다.
+
+96.
+3
+부양하는 가족이 없어야 하므로 사번 = 부양사번인 경우를 빼버리면 된다.
+즉 NOT EXISTS에 사번 = 부양사번이 들어간다.
+NOT IN이나 LEFT OUTER JOIN을 이용해도 구할 수 있다.
+
+97.
+3
+약관에 하나 이상 거절한 회원번호와 회원명을 결과물로 가져온다.
+3번은 연관서브쿼리로 연결되어야 하는데, 그렇지 못함
+
+98. ★★
+1
+HAVING절은 2014년 10월 1일 이후로 진행된 이벤트의 수가 COUNT로 센것보다 큰지 여부를 살피는 것이고
+COUNT로 센 것은 회원ID로 메일이 발송된 횟수가 COUNT로 센 것이 된다.
+그리고 이렇게 진행된 이벤트가 메일이 발송된 횟수보다 많으면 EXISTS에 의해 뽑히고, SELECT로 출력된다.
+1은 발송된 기록이 있는 회원을 찾는게 아니라 누락된 회원을 찾는 것이고
+2는 IN으로 변경하면 횟수를 비교할 수 없고
+4는 GROUP BY를 굳이 쓰지 않아도 통째로 HAVING절을 사용할 수 있다.
+
+99.
+2
+1: > <= 등의 연산자 사용 가능
+3: 비연관 서브쿼리가 주로 메인쿼리에 값을 제공하기 위한 목적으로 사용된다.
+(연관 서브쿼리는 서브쿼리가 메인쿼리 컬럼을 포함하고 있는 형태의 서브쿼리 - 보통 조건)
+4: 항상 조건 만족을 위해 쓰이는 것은 아니다. 메인쿼리의 결과가 서브쿼리로 갈수도 있고.. 그 반대도 가능하다.
+
+100.
+3
+1명 이상의 사원이 존재하는 부서에서 2014년에 입사한 사원의
+사원번호, 사원명, 부서번호, 부서명, 부양가족수를 알아내는 SQL문이다.
+SELECT절에 사용된 서브쿼리는 단일행 연관 서브쿼리로 JOIN으로 변경이 가능하다
+FROM절에 사용된 서브쿼리는 Inline View 또는 Dynamic View이고
+WHERE절에 사용된 서브쿼리는 다중행 연관 서브쿼리이다.
+인라인 뷰는 SELECT절의 결과를 FROM절에서 하나의 테이블처럼 사용하고 싶을 때 사용하는 것이고
+스칼라 서브쿼리는 SELECT절에 오는 서브쿼리로 결과값이 1행인 쿼리를 말한다.
+3번 보기의 WHERE절은 EXISTS조차 필요가 없으므로, 굳이 더 추가할 필요가 없다.
+
+101.
+2
+1: D가 안쓰임
+2:
+3: 특정 평가회차에 대한 결과가 아닌 평가 결과 엔터티의 평가회차, 평가등급, 평가일자 속성에 대해서
+개별 MAX값을 구하고 있다.
+4: 상품ID, 평가항목 ID별로 개별 MAX값을 구하고 있다.
+
+102.
+3
+UPDATE문을 활용하여 담당자를 가장 최신 변경 일자의 특정 부서코드의 담당자로 수정해야한다.
+1: GROUP BY 사용 이상함, UPDATE의 범위는 WHERE이 결정하는데, WHERE절이 없어서 담당자가 NULL이됨
+2: WHERE절이 부서를 가리키고있다 - 전부 업데이트되버림
+4: 2015.01.25. ???? 점때문에 틀림
+
+103.
+2
+뷰는 단지 정의만을 가지고 있으며 실행 시점에 질의를 재작성하여 수행
+뷰는 복잡한 SQL문장을 단순화 시켜주는 장점이 있다. - 테이블 구조가 변경되어도 뷰를 사용하는 응용프로그램은
+변경하지 않아도 된다
+뷰는 보안을 강화하기 위한 목적으로도 쓰인다 (사람들에게 보여주는 부분은 따로~)
+실제 데이터를 저장하고 있는 뷰를 생성하는 기능을 지원하는 DBMS도 있다.
+
+104.
+2
+200이 넘고 B인 친구만 가져오면 200 1개뿐이라 200이다.
+
+105.
+3
+A.서비스ID가 NULL이 아니면 A.서비스ID, 아니면 '합계'를 넣는다. 그리고 이 열의 alias는 서비스ID
+그 다음은 가입일자가 있으면 값, NULL이면 소계를 넣고 가입일자라는 컬럼을 생성한다
+마지막으로 회원번호의 수를 세서 가입건수 열에 넣는다.
+
+NVL/ISNULL 함수는 값이 null인 경우 지정값을 출력한다. NVL("값","지정값")
+ROLLUP은 집계함수! 파라미터로 기준열들을 하나씩 채워나가면서 합계가 집계가 된다.
+GROUPING 함수는 그룹쿼리에서 사용하는 함수로 파라미터의 평가값이 ROLLUP에 의해 생성됐으면 1,
+아닌 경우에는 0을 반환한다 (반드시 사용할 컬럼이 GROUP BY절에서 명시되어야 한다)
+
+106.
+2
+GROUPING 함수는 평가값이 ROLLUP에 의해 생성되었으면 1, 아니면 0을 반환한다.
+CUBE는 결합 가능한 모든 값에 대하여 다차원 집계를 생성한다
+GROUPING SETS를 사용하면 계층구조 없이 지역 합계와 월별 합계를 생성한다(각각 따로!)
+
+107.
+ROLLUP
+계층구조로 합을 쌓고 있으므로 롤업~
+
+108.
+4
+CUBE 그룹함수는 다른 그룹함수에 비해 부하가 크다
+순서에 따라 결과가 달라지는 것은 ROLLUP
+집계대상 칼럼 이외의 GROUP 대상 컬럼의 값은 NULL을 반환한다
+
+109.
+2,3
+설비와 에너지사용 테이블의 모든 경우의 수를 가져왔으므로 CUBE다.
+만약 GROUPING SET을 써서 전체집계함수를 나오게 하고 싶으면 GROUPING SETS(컬럼1, 컬럼2, ()) 쓰면 된다!
+GROUPING SETS에서 모든 경우의 수를 넣으면 CUBE와 동일하게 작동하도록 만들 수 있다.
+
+110.
+4
+결과에는 자재번호별 SUB TOTAL과 (자재번호,발주처별) SUB TOTAL이 나와있다.
+이렇게 그룹핑되어있으므로, GROUPING SETS의 (자재번호, (발주처ID, 발주일자))가 답이다.
+
+111.
+2
+1: GROUPING SETS(월,상품ID)
+3: GROUPING SETS(상품ID, 월, ())
+4: GROUPING SETS((월, 상품ID),월) 
+
+112.
+3
+윈도우함수는 결과에 대한 함수처리이기 떄문에 결과 건수는 줄지 않는다.
+윈도우함수는 GROUP BY 구문과 병행하여 쓸 수는 없다
+집계 윈도우 함수 사용시 윈도우 절과 함께 사용하면 집계대상 레코드범위 지정 가능 
+
+113.
+3
+RANK함수는 동일 순위일 경우 중간 순위를 비운다
+이걸 채우려면 DENSE_RANK를 쓰면 된다.
+ROW_NUMBER 하마수는 동일값에 대해 유일한 순위를 부여한다.
+
+114.
+4
+결과를 보면 DENSE_RANK가 아닌 RANK이고, PARTITION BY 게임상품ID를 해야 게임상품별로 파티션을 나눌 수 있다.
+대신 4번 보기에서 WHERE 순위 <= 10;이 빠진 것 같다.
+
+115.
+3
+가장 점수가 높은 것들만 추출해야 하기 때문에 3번이 된다.
+
+116.
+3
+GROUP BY 절의 집합을 원본으로 하는 데이터를 WINDOW FUNCTION과 함께 사용한다면
+같이 사용한다고 해도 오류가 발생하지 않고, SELECT구문 작동 순서에 따라 GROUP BY로 먼저 그룹핑된 후에
+SELECT구문이 작동하게 된다.
+
+117.
+1
+안쪽 IN-LINE VIEW에 의해 사원ID와 부서별 최고연봉이 결과로 나오고,
+사원ID와 최고연봉과 연봉이 일치하는 친구들만 뽑아서 SELECT로 출력한다
+
+118.
+1
+FLAG1과 FLAG2를 만들어서 둘중 하나 이상이 0인 ID, START_VAL, END_VAL을 뽑아온다.
+LAG(칼럼)을 하면 현재 행의 이전 행의 칼럼값을 가져온다.
+LEAD(칼럼)을 하면 현재 행의 다음 행의 칼럼값을 가져온다.
+만약 2번째 매개변수로 숫자가 들어가면 그 숫자만큼 이동한 값을 가져온다.
+3번째 매개변수의 경우 가져올 행의 값이 없다면 이 매개변수가 기본값이 된다.
+
+119.
+GRANT, REVOKE
+DCL은 1과목에서 정리했다!
+별도로 TCL에는 COMMIT, ROLLBACK이 들어간다!
+
+120.
+4
+찾기 위한 SELECT와 갱신을 위한 UPDATE 명령어를 GRANT를 통해 권한을 부여한다.
+이때 UPDATE ON 테이블명 TO 유저이름 형식을 사용한다.
+
+121. ★
+ROLE
+많은 DBMS에서는 사용자와 권한 사이에서 중개 역할을 수행하는 ROLE을 제공하고 있다.
+
+122.
+1,3
+Lee는 Kim에게 R테이블에 대한 SELECT, INSERT, DELETE 권한을 주고, 이걸 다른사람에게 줄 수 있는
+옵션도 제공했다.
+Kim은 Park에게 R테이블에 대한 SELECT, INSERT, DELETE 권한을 주었다.
+Lee는 Kim으로부터 R테이블에 대한 DELETE 권한을 뺏었다.
+Lee는 Kim으로부터 R테이블에 대한 INSERT 권한을 뺏고, 그로부터 부여된 다른사람의 INSERT 권한도 뺏었다.
+즉, Kim과 Park은 모두 INSERT 권한이 없다.
+
+123.
+3
+PL/SQL로 작성된 Procedure, User Defined Function은 작성자의 기준으로 트랜잭션을 분할할 수 있다.
+
+124. ★
+3
+PL/SQL에서는 동적 SQL 또는 DDL 문장을 실행할 때 EXECUTE IMMEDIATE를 사용하여야 한다.
+당연히 DELETE를 쓰면 Log가 남아서 복구할 수 있기 때문에 DELETE를 쓰면 안된다.
+
+125.
+4
+Stored Module로 구현 가능한 기능은 1,2,3이고, 4는 트리거의 용도이다.
+
+126.
+3
+Trigger는 Procedure와 달리 Commit 및 Rollback와 같은 TCL을 사용할 수 없다.
+
+127.
+4
+트리거는 DML문이 수행되었을 때 데이터베이스에서 자동으로 동작하도록 저장된 저장 프로그램이다!
+프로시저는 EXECUTE 명령어로 수행해야하지만 트리거는 생성하면 자동으로 실행된다.
+프로시저는 COMMIT ROLLBACK등 TCL을 사용 가능하지만 트리거는 TCL을 사용할 수 없다.
+
+
+
+----------------------------------------------------------------------------------------------------------------
+
+128.
+Cost Based Optimizer, 비용기반 옵티마이저, CBO
+처리시간, 자원량 등을 기반으로 효율성을 따지는 것은 CBO
+
+129.
+4
+계획을 통해 처리 건수를 알 수는 없다.
+실행계획을 통해 알 수 있는 정보는 조인기법, 최적화정보, 액세스기법, 연산 등이 있다.
+
+130.
+3 4 2
+실행 계획을 읽는 순서는 위에서 아래로, 안에서 밖으로 읽는다.
+
+131.
